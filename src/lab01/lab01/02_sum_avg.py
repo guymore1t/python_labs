@@ -1,0 +1,5 @@
+a = float(input())
+b = float(input())
+print('a:' ,a)
+print('b:', b)
+print('sum=',a + b,'avg=',((a + b) / 2))
