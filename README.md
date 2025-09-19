@@ -59,5 +59,23 @@ else:
 
 ![Картинка4](./images/lab01/04.png)
 
+# Задание 5
+```
+name = input('ФИО: ')
+
+name2 = name.strip()
+length = len(name2)
+
+parts = name2.split()
+initials = ''.join(word[0].upper() for word in parts)
+
+print('Инициалы:', initials)
+print('Длина(символов):',length)
+    
+```
+
+![Картинка5](./images/lab01/05.png)
+
+
 
 
