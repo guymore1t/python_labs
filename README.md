@@ -141,6 +141,66 @@ def flatten(mat: list[list | tuple]) -> list:
 
 ![Картинка9](./images/lab02/arrays03.png)
 
+# Задание 2
+
+# transpose
+
+```
+def transpose(mat: list[list[float or int]]) -> list[list]:
+    if len(mat) == 0:
+        return []
+    
+    for row in mat:
+        if len(mat[0]) != len(row):
+            raise ValueError
+        
+    res = []
+
+    row_cnt = len(mat)
+    stolb_cnt = len(mat[0])
+
+    for stolb_index in range(stolb_cnt):
+        new_row = []
+        for row_index in range(row_cnt):
+            new_row.append(mat[row_index][stolb_index])
+        res.append(new_row)
+
+    return res
+
+```
+![Картинка10](./images/lab02/matrix01.png)
+
+# row_sums
+
+```
+def row_sums(mat: list[list[float or int]]) -> list[float]:
+
+    for row in mat:
+        if len(mat[0]) != len(row):
+            raise ValueError
+        
+    res = [sum(row) for row in mat]
+
+    return res
+```
+![Картинка11](./images/lab02/matrix02.png)
+
+# col_sums
+
+```
+def col_sums(mat: list[list[float | int]]) -> list[float]:
+
+    for row in mat:
+        if len(mat[0]) != len(row):
+            raise ValueError
+
+    res = [sum(row) for row in zip(*mat)]
+
+    return res
+
+```
+![Картинка12](./images/lab02/matrix03.png)
+
 
 
 
