@@ -91,7 +91,6 @@ for a in range(n):
         zaoch +=1
 
 print(och, zaoch)
-    
 ```
 
 ![Картинка6](./images/lab01/06.png)
@@ -100,6 +99,9 @@ print(och, zaoch)
 
 # Задание 1
 
+
+# min_max
+
 ```
 def min_max(nums: list[float | int]) -> tuple[float | int, float | int]:
 
@@ -107,14 +109,26 @@ def min_max(nums: list[float | int]) -> tuple[float | int, float | int]:
         raise ValueError
     
     return(min(nums), max(nums))
+```
 
+![Картинка7](./images/lab02/arrays01.png)
+
+# unique_sorted
+
+```
 def unique_sorted(nums: list[float | int]) -> list[float | int]:
 
     if len(nums) == 0:
         return []
 
     return(sorted(set(nums)))
+```
 
+![Картинка8](./images/lab02/arrays02.png)
+
+# flatten
+
+```
 def flatten(mat: list[list | tuple]) -> list:
 
     res = []
@@ -127,17 +141,7 @@ def flatten(mat: list[list | tuple]) -> list:
             raise TypeError
         
     return res
-    
 ```
-# min_max
-
-![Картинка7](./images/lab02/arrays01.png)
-
-# unique_sorted
-
-![Картинка8](./images/lab02/arrays02.png)
-
-# flatten
 
 ![Картинка9](./images/lab02/arrays03.png)
 
