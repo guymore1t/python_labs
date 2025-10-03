@@ -102,7 +102,7 @@ print(och, zaoch)
 
 # min_max
 
-```
+```py
 def min_max(nums: list[float | int]) -> tuple[float | int, float | int]:
 
     if len(nums) == 0:
@@ -115,7 +115,7 @@ def min_max(nums: list[float | int]) -> tuple[float | int, float | int]:
 
 # unique_sorted
 
-```
+```py
 def unique_sorted(nums: list[float | int]) -> list[float | int]:
 
     if len(nums) == 0:
@@ -128,7 +128,7 @@ def unique_sorted(nums: list[float | int]) -> list[float | int]:
 
 # flatten
 
-```
+```py
 def flatten(mat: list[list | tuple]) -> list:
 
     res = []
@@ -149,7 +149,7 @@ def flatten(mat: list[list | tuple]) -> list:
 
 # transpose
 
-```
+```py
 def transpose(mat: list[list[float or int]]) -> list[list]:
     if len(mat) == 0:
         return []
@@ -176,7 +176,7 @@ def transpose(mat: list[list[float or int]]) -> list[list]:
 
 # row_sums
 
-```
+```py
 def row_sums(mat: list[list[float or int]]) -> list[float]:
 
     for row in mat:
@@ -191,7 +191,7 @@ def row_sums(mat: list[list[float or int]]) -> list[float]:
 
 # col_sums
 
-```
+```py
 def col_sums(mat: list[list[float | int]]) -> list[float]:
 
     for row in mat:
@@ -207,7 +207,7 @@ def col_sums(mat: list[list[float | int]]) -> list[float]:
 
 # Задание 3
 
-```
+```py
 def format_record(rec: tuple[str, str, float]) -> str:
 
     fio, group, gpa = rec
