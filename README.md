@@ -261,8 +261,100 @@ print(format_record(student4))
 ```
 ![Картинка13](./images/lab02/tuples01.png)
 
+## Лабораторная работа 3
 
+# Задание А
 
+# normalize
 
+```py
+def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
 
+    text = text.replace('Ё','E')
+    text = text.replace('ё','е')
+    text = text.replace('\r',' ').replace('\t',' ').replace('\n',' ')
+    text = text.split()
+    text2 = ' '.join(text)
+    text3 = text2.casefold()
+    return text3
 
+t1 = "ПрИвЕт\nМИр\t"
+t2 = "ёжик, Ёлка"
+t3 = "Hello\r\nWorld"
+t4 = "  двойные   пробелы  "
+
+print(normalize(t1), normalize(t2), normalize(t3), normalize(t4), sep='\n')
+```
+
+![картинка14](./images/lab03/normalize.png)
+
+# tokenize
+
+```py
+import re 
+
+def tokenize(text: str) -> list[str]:
+    pattern = r'\w+(?:-\w+)*'
+    return re.findall(pattern, text)
+
+t1 = "привет мир"
+t2 = "hello,world!!!"
+t3 = "по-настоящему круто"
+t4 = "2025 год"
+t5 = "emoji 😀 не слово"
+
+print(tokenize(t1), tokenize(t2),tokenize(t3),tokenize(t4),tokenize(t5),sep='\n')
+```
+
+![картинка15](./images/lab03/tokenize.png)
+
+# count_freq + top_n
+
+```py
+def count_freq(tokens: list[str]) -> dict[str, int]:
+    freq = {}  
+    
+    for token in tokens:  
+        if token in freq:  
+            freq[token] += 1  
+        else: 
+            freq[token] = 1 
+
+    items = list(freq.items())
+    items.sort(key = lambda item: (-item[1], item[0]))
+    
+    return items
+
+tokens1 = ["a","b","a","c","b","a"]
+tokens2 = ["bb","aa","bb","aa","cc"]
+print(count_freq(tokens1))
+print(count_freq(tokens2))
+```
+
+![картинка16](./images/lab03/count_freq.png)
+
+## Задание B
+
+```py
+import sys
+from lib import text
+
+input_text = sys.stdin.readline()
+
+normalized_text = text.normalize(input_text, casefold = True, yo2e = True)
+tokens = text.tokenize(normalized_text)
+freq = text.count_freq(tokens)
+
+words_count = len(tokens)
+unique_words = len(freq)
+top_5 = freq[:5]    
+
+print(f"Всего слов: {words_count}")
+print(f"Уникальных слов: {unique_words}")
+print("Топ-5:")
+
+for word, count in top_5:
+    print(f'{word}:{count}')
+```
+
+![картинка17](./images/lab03/test_stats.png)
