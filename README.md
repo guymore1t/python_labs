@@ -269,21 +269,23 @@ print(format_record(student4))
 
 ```py
 def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
-
-    text = text.replace('Ё','E')
-    text = text.replace('ё','е')
+    if yo2e:
+        text = text.replace('Ё','E')
+        text = text.replace('ё','е')
+    
     text = text.replace('\r',' ').replace('\t',' ').replace('\n',' ')
     text = text.split()
-    text2 = ' '.join(text)
-    text3 = text2.casefold()
-    return text3
+    text = ' '.join(text)
+    
+    if casefold:
+        text = text.casefold()
+    
+    return text
 
 t1 = "ПрИвЕт\nМИр\t"
 t2 = "ёжик, Ёлка"
 t3 = "Hello\r\nWorld"
 t4 = "  двойные   пробелы  "
-
-print(normalize(t1), normalize(t2), normalize(t3), normalize(t4), sep='\n')
 ```
 
 ![картинка14](./images/lab03/normalize.png)
