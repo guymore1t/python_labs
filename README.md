@@ -360,3 +360,127 @@ for word, count in top_5:
 ```
 
 ![картинка17](./images/lab03/test_stats.png)
+
+##  Лабораторная работа 4
+
+# Задание А
+
+```py
+from pathlib import Path
+from typing import Iterable, Sequence
+import csv
+
+def read_text(path: str | Path, encoding: str = "utf-8") -> str:  
+    """чтобы выбрать кодировку, напишите ее название после encoding="""
+    with open(path, "r", encoding=encoding) as file:      
+        return file.read()
+    
+def write_csv(rows: list[tuple | list], path: str | Path, header: tuple[str, ...] | None = None) -> None:
+    p = Path(path)
+    rows_list = list(rows)
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    
+    if rows:
+        first_row_length = len(rows[0])
+        for i, row in enumerate(rows):
+            if len(row) != first_row_length:
+                raise ValueError
+            
+    if header is not None and rows_list and len(header) != len(rows_list[0]):
+        raise ValueError
+    
+    with p.open('w', newline='', encoding='utf-8') as f:
+        w = csv.writer(f)
+        if header is not None:
+            w.writerows(header)
+        w.writerows(rows_list)
+```
+## Мини-тест
+
+```py
+from src.lab04.io_txt_csv import read_text, write_csv
+txt = read_text("data/lab04/input.txt")
+write_csv([("word","count"),("Анимешник наруто",666)], "data/check.csv")  
+```
+
+![картинка18](./images/lab04/mini_test.png)
+
+## Задание В
+
+```py
+from pathlib import Path
+import sys
+
+current_dir = Path(__file__).parent
+lib_path = current_dir.parent / "lib"
+sys.path.append(str(lib_path))
+
+from text import normalize, tokenize, count_freq
+
+INPUT_FILE = 'data/lab04/input.txt'
+OUTPUT_FILE = 'data/lab04/report.csv'
+ENCODING = 'utf-8'  
+
+def main():
+    if not Path(INPUT_FILE).exists():
+        print(f"Ошибка: файл {INPUT_FILE} не найден!")
+        print("Создайте файл data/lab04/input.txt с текстом")
+        sys.exit(1)
+    
+    try:
+        with open(INPUT_FILE,'r', encoding=ENCODING) as f:
+            text = f.read()
+        
+    except:
+         print("Ошибка при чтении файла!")
+         sys.exit(1)
+
+    total_words = 0
+    unique_words = 0
+    word_counts = []
+
+    if not text.strip():
+        Path(OUTPUT_FILE).parent.mkdir(exist_ok=True)
+        with open(OUTPUT_FILE, 'w', encoding=ENCODING) as f:
+            f.write('word,count\n')
+
+    if text.strip():
+        clean_text = normalize(text)
+        words = tokenize(clean_text)
+        word_counts = count_freq(words)
+
+        total_words = len(words)
+        unique_words = len(word_counts)
+
+        Path(OUTPUT_FILE).parent.mkdir(exist_ok=True)
+
+        with open(OUTPUT_FILE, 'w', encoding=ENCODING) as f:
+            f.write('word,count\n')
+            for word,count in word_counts:
+                f.write(f'{word},{count}\n')
+
+    print(f'Всего слов: {total_words}')
+    print(f'Уникальных слов: {unique_words}')
+    print('Топ-5:')
+    for word, count in word_counts[:5]:
+        print(f'{word}:{count}')
+
+if __name__ == '__main__':
+    main()
+```
+# Коду из задания B был дан текст рассказа "Толстый и тонкий":
+
+# CSV файл:
+
+![картинка19](./images/lab04/B02.png)
+
+# Консоль:
+
+![картинка20](./images/lab04/B01.png)
+
+# Пустой файл выводит только заголовок:
+
+![картинка21](./images/lab04/B03.png)
+
+
+
