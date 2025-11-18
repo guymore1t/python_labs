@@ -482,5 +482,192 @@ if __name__ == '__main__':
 
 ![картинка21](./images/lab04/B03.png)
 
+## Лабораторная работа №5
 
+# json -> csv
+
+```py
+import json
+import csv
+from pathlib import Path
+
+
+def json_to_csv(json_path: str, csv_path: str) -> None:
+    if not json_path.lower().endswith('.json'):
+        raise ValueError('Входной файл должен иметь расширение .json')
+    if not csv_path.lower().endswith('.csv'):
+        raise ValueError('Выходной файл должен иметь расширение .csv')
+
+    json_file = Path(json_path)
+    csv_file = Path(csv_path)
+
+    if not json_file.exists():
+        raise FileNotFoundError('Файл не найден')
+
+    with json_file.open('r', encoding='utf-8') as f:
+        content = f.read().strip()
+        if not content:
+            raise ValueError('JSON-файл пустой')
+
+        try:
+            data = json.loads(content)
+        except json.JSONDecodeError:
+            raise ValueError('Некорректный формат JSON')
+
+    if not isinstance(data, list) or not all(isinstance(x, dict) for x in data):
+        raise ValueError('Ожидался список словарей в JSON')
+    if not data:
+        raise ValueError('JSON файл содержит пустой список')
+
+    headers = list(data[0].keys())
+    rows = [{key: obj.get(key, '') for key in headers} for obj in data]
+
+    with csv_file.open('w', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=headers)
+        writer.writeheader()
+        writer.writerows(rows)
+
+    if csv_file.stat().st_size == 0:
+        raise ValueError("CSV-файл получился пустым")
+
+
+if __name__ == "__main__":
+    json_to_csv("data/samples/people.json", "data/out/result1.csv")
+```
+
+# на вход программе были даны следующие данные:
+
+![картинка22](./images/lab05/json_csv.png)
+
+# результат вывода
+
+![картинка23](./images/lab05/json_csv_res.png)
+
+# csv -> json
+
+```py
+def csv_to_json(csv_path: str, json_path: str) -> None:
+
+    if not csv_path.lower().endswith('.csv'):
+        raise ValueError('Входной файл должен иметь расширение .csv')
+    if not json_path.lower().endswith('.json'):
+        raise ValueError('Выходной файл должен иметь расширение .json')
+
+    csv_file = Path(csv_path)
+    json_file = Path(json_path)
+
+    if not csv_file.exists():
+        raise FileNotFoundError("CSV-файл не найден")
+
+    with csv_file.open('r', encoding='utf-8') as f:
+        content = f.read().strip()
+        if not content:
+            raise ValueError("CSV-файл пустой")
+
+    with csv_file.open('r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+
+        if reader.fieldnames is None:
+            raise ValueError("CSV-файл не содержит заголовка")
+
+        rows = list(reader)
+
+    if not rows:
+        raise ValueError("CSV-файл не содержит данных")
+
+    original_count = len(rows)
+
+    with json_file.open('w', encoding='utf-8') as f:
+        json.dump(rows, f, ensure_ascii=False, indent=2)
+
+    with json_file.open('r', encoding='utf-8') as f:
+        try:
+            loaded = json.load(f)
+        except json.JSONDecodeError:
+            raise ValueError("Пустой JSON или некорректная структура")
+
+    if not isinstance(loaded, list):
+        raise ValueError("JSON должен содержать список")
+
+    if not all(isinstance(x, dict) for x in loaded):
+        raise ValueError("JSON должен содержать список словарей")
+
+    if len(loaded) != original_count:
+        raise ValueError("Количество записей не совпадает после конвертации")
+
+
+
+if __name__ == "__main__":
+    csv_to_json("data/samples/people.csv", "data/out/result2.json")
+```
+
+# на вход программе были даны следующие данные:
+
+![картинка24](./images/lab05/csv_json.png)
+
+
+# результат вывода
+
+![картинка25](./images/lab05/csv_json_res.png)
+
+# csv -> xlsx
+
+```py
+from openpyxl import Workbook
+import csv
+import os
+
+def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
+    if not csv_path.lower().endswith('.csv'):
+        raise ValueError('Неверный тип файла, ожидается csv')
+    if not xlsx_path.lower().endswith('.xlsx'):
+        raise ValueError('Неверный тип файла, ожидается xlsx')
+    
+    if not os.path.exists(csv_path):
+        raise FileNotFoundError('Файл не найден')
+    
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as csv_file:
+            csv_reader = csv.reader(csv_file)
+            csv_data = list(csv_reader)
+    except UnicodeDecodeError:
+        raise ValueError('Ошибка кодировки, ожидается utf-8')
+    
+    if not csv_data:
+        raise ValueError('csv файл пуст')
+    
+    wb = Workbook()
+    ws = wb.active
+    ws.title = 'Sheet1'
+
+    for row in csv_data:
+        ws.append(row)
+    
+    for column in ws.columns:
+        max_length = 0
+        column_letter = column[0].column_letter
+        for cell in column:
+            try:
+                max_length = max(max_length, len(str(cell.value)))
+            except:
+                pass
+
+            
+        adjusted_width = max(max_length + 2, 8)
+
+        ws.column_dimensions[column_letter].width = adjusted_width
+
+    wb.save(xlsx_path)
+
+if __name__ == "__main__":
+    csv_to_xlsx("data/samples/cities.csv", "data/out/result3.xlsx")
+```
+
+# на вход программе были даны следующие данные:
+
+![картинка26](./images/lab05/csv_xlsx.png)
+
+# результат вывода:
+
+![картинка27](./images/lab05/csv_xlsx_res.png)
 
