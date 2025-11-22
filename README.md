@@ -377,6 +377,8 @@ def read_text(path: str | Path, encoding: str = "utf-8") -> str:
     
 def write_csv(rows: list[tuple | list], path: str | Path, header: tuple[str, ...] | None = None) -> None:
     p = Path(path)
+    if p.suffix.lower() != '.csv':
+        raise ValueError('Должен быть csv файл')
     rows_list = list(rows)
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     

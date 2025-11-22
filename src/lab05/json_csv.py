@@ -63,7 +63,7 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
         if not content:
             raise ValueError("CSV-файл пустой")
 
-    # читаем CSV корректно
+    
     with csv_file.open('r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
 
