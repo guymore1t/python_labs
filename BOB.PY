@@ -1,1 +1,10 @@
-print(12345 % 10)
+res = []
+a = int(input())
+b = int(input())
+c = int(input())
+d = int(input())
+res.append(a)
+res.append(b)
+res.append(c)
+res.append(d)
+print(min(res))

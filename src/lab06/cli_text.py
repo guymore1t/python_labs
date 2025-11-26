@@ -3,89 +3,78 @@ import sys
 from pathlib import Path
 
 current_file = Path(__file__)
-src_dir = current_file.parent.parent
-sys.path.insert(0, str(src_dir))
+parent_dir = current_file.parent.parent
+sys.path.insert(0, str(parent_dir))
 
 from lib.text import normalize, tokenize, count_freq, top_n
 
 
-
-def stats_command(args):
-    input_path = Path(args.input)
-
-    if not input_path.exists():
-        raise FileNotFoundError(f"Файл не найден: {input_path}")
-
-    try:
-        with open(input_path, "r", encoding="utf-8") as f:
-            text = f.read()
-    except Exception as e:
-        raise FileNotFoundError(f"Ошибка при чтении файла: {e}")
-
-    text = normalize(text)
-    tokens = tokenize(text)
-
-    freq_dict = {}
-    for token in tokens:
-        freq_dict[token] = freq_dict.get(token, 0) + 1
-
-    top_words = top_n(freq_dict, args.top)
-
-    print(f"Всего слов: {len(tokens)}")
-    print(f"Уникальных слов: {len(freq_dict)}")
-    print(f"Топ-{args.top}:")
-    for word, count in top_words:
-        print(f"  {word}: {count}")
-
-
-def cat_command(args):
-    input_path = Path(args.input)
-
-    if not input_path.exists():
-        raise FileNotFoundError(f"Файл не найден: {input_path}")
-
-    try:
-        with open(input_path, "r", encoding="utf-8") as f:
-            lines = f.readlines()
-    except Exception as e:
-        raise FileNotFoundError(f"Ошибка при чтении файла: {e}")
-
-    for i, line in enumerate(lines, start=1):
-        if args.n:
-            print(f"{i:6d}  {line}", end="")
-        else:
-            print(line, end="")
-
-
 def main():
     parser = argparse.ArgumentParser(
-        description="CLI модуль для работы с текстом"
+        description="CLI утилиты для текста",
+        add_help=False
     )
 
-    subparsers = parser.add_subparsers(dest="command")
+    subparsers = parser.add_subparsers(dest="command", title="доступные команды")
 
-    stats_parser = subparsers.add_parser("stats", help="Анализ частот слов")
-    stats_parser.add_argument("--input", required=True)
-    stats_parser.add_argument("--top", type=int, default=5)
+    cat_parser = subparsers.add_parser("cat", help="Показать содержимое файла")
+    cat_parser.add_argument("--input", required=True, help="Входной файл")
+    cat_parser.add_argument("-n", action="store_true", help="Показать номера строк")
 
-    cat_parser = subparsers.add_parser("cat", help="Вывод содержимого файла")
-    cat_parser.add_argument("--input", required=True)
-    cat_parser.add_argument("-n", action="store_true")
+    stats_parser = subparsers.add_parser("stats", help="Статистика по тексту")
+    stats_parser.add_argument("--input", required=True, help="Входной файл")
+    stats_parser.add_argument("--top", type=int, default=5, help="Количество топ-слов")
+
+    parser.add_argument("-h", "--help", action="help", default=argparse.SUPPRESS, 
+                       help="Показать справку")
 
     args = parser.parse_args()
 
-    if not args.command:
-        parser.error("Необходимо указать команду (stats или cat)")
+    if args.command is None:
+        return
 
-    try:
-        if args.command == "stats":
-            stats_command(args)
-        elif args.command == "cat":
-            cat_command(args)
-    except FileNotFoundError as e:
-        parser.error(str(e))
-    except Exception as e:
-        parser.error(f"Ошибка: {e}")
+    if args.command == "cat":
+        path = Path(args.input)
+        if not path.exists():
+            print(f"Ошибка: Файл не найден: {path}")
+            sys.exit(1)
+
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+        except Exception as e:
+            print(f"Ошибка при чтении файла: {e}")
+            sys.exit(1)
+
+        for i, line in enumerate(lines, 1):
+            if args.n:
+                print(f"{i:6d}  {line}", end="")
+            else:
+                print(line, end="")
+
+    elif args.command == "stats":
+        path = Path(args.input)
+        if not path.exists():
+            print(f"Ошибка: Файл не найден: {path}")
+            sys.exit(1)
+
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                text = f.read()
+        except Exception as e:
+            print(f"Ошибка при чтении файла: {e}")
+            sys.exit(1)
+
+        text = normalize(text)
+        tokens = tokenize(text)
+        freq = count_freq(tokens)
+        top_words = top_n(freq, args.top)
+
+        print(f"Всего слов: {len(tokens)}")
+        print(f"Уникальных слов: {len(freq)}")
+        print(f"Топ-{args.top}:")
+        for word, cnt in top_words:
+            print(f"  {word}: {cnt}")
 
 
 if __name__ == "__main__":

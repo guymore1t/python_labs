@@ -42,8 +42,8 @@ def json_to_csv(json_path: str, csv_path: str) -> None:
         raise ValueError("CSV-файл получился пустым")
 
 
-#if __name__ == "__main__":
-    #json_to_csv("data/samples/people.json", "data/out/result1.csv")
+if __name__ == "__main__":
+    json_to_csv("data/samples/people.json", "data/out/result1.csv")
     
 def csv_to_json(csv_path: str, json_path: str) -> None:
 
@@ -97,7 +97,7 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
 
 
 
-if __name__ == "__main__":
-    csv_to_json("data/samples/people.csv", "data/out/result2.json")
+#if __name__ == "__main__":
+    #csv_to_json("data/samples/people.csv", "data/out/result2.json")
 
 
