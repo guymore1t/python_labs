@@ -4,36 +4,36 @@ from pathlib import Path
 
 
 def json_to_csv(json_path: str, csv_path: str) -> None:
-    if not json_path.lower().endswith('.json'):
-        raise ValueError('Входной файл должен иметь расширение .json')
-    if not csv_path.lower().endswith('.csv'):
-        raise ValueError('Выходной файл должен иметь расширение .csv')
+    if not json_path.lower().endswith(".json"):
+        raise ValueError("Входной файл должен иметь расширение .json")
+    if not csv_path.lower().endswith(".csv"):
+        raise ValueError("Выходной файл должен иметь расширение .csv")
 
     json_file = Path(json_path)
     csv_file = Path(csv_path)
 
     if not json_file.exists():
-        raise FileNotFoundError('Файл не найден')
+        raise FileNotFoundError("Файл не найден")
 
-    with json_file.open('r', encoding='utf-8') as f:
+    with json_file.open("r", encoding="utf-8") as f:
         content = f.read().strip()
         if not content:
-            raise ValueError('JSON-файл пустой')
+            raise ValueError("JSON-файл пустой")
 
         try:
             data = json.loads(content)
         except json.JSONDecodeError:
-            raise ValueError('Некорректный формат JSON')
+            raise ValueError("Некорректный формат JSON")
 
     if not isinstance(data, list) or not all(isinstance(x, dict) for x in data):
-        raise ValueError('Ожидался список словарей в JSON')
+        raise ValueError("Ожидался список словарей в JSON")
     if not data:
-        raise ValueError('JSON файл содержит пустой список')
+        raise ValueError("JSON файл содержит пустой список")
 
     headers = list(data[0].keys())
-    rows = [{key: obj.get(key, '') for key in headers} for obj in data]
+    rows = [{key: obj.get(key, "") for key in headers} for obj in data]
 
-    with csv_file.open('w', encoding='utf-8', newline='') as f:
+    with csv_file.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=headers)
         writer.writeheader()
         writer.writerows(rows)
@@ -44,13 +44,14 @@ def json_to_csv(json_path: str, csv_path: str) -> None:
 
 if __name__ == "__main__":
     json_to_csv("data/samples/people.json", "data/out/result1.csv")
-    
+
+
 def csv_to_json(csv_path: str, json_path: str) -> None:
 
-    if not csv_path.lower().endswith('.csv'):
-        raise ValueError('Входной файл должен иметь расширение .csv')
-    if not json_path.lower().endswith('.json'):
-        raise ValueError('Выходной файл должен иметь расширение .json')
+    if not csv_path.lower().endswith(".csv"):
+        raise ValueError("Входной файл должен иметь расширение .csv")
+    if not json_path.lower().endswith(".json"):
+        raise ValueError("Выходной файл должен иметь расширение .json")
 
     csv_file = Path(csv_path)
     json_file = Path(json_path)
@@ -58,13 +59,12 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
     if not csv_file.exists():
         raise FileNotFoundError("CSV-файл не найден")
 
-    with csv_file.open('r', encoding='utf-8') as f:
+    with csv_file.open("r", encoding="utf-8") as f:
         content = f.read().strip()
         if not content:
             raise ValueError("CSV-файл пустой")
 
-    
-    with csv_file.open('r', encoding='utf-8') as f:
+    with csv_file.open("r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
 
         if reader.fieldnames is None:
@@ -77,10 +77,10 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
 
     original_count = len(rows)
 
-    with json_file.open('w', encoding='utf-8') as f:
+    with json_file.open("w", encoding="utf-8") as f:
         json.dump(rows, f, ensure_ascii=False, indent=2)
 
-    with json_file.open('r', encoding='utf-8') as f:
+    with json_file.open("r", encoding="utf-8") as f:
         try:
             loaded = json.load(f)
         except json.JSONDecodeError:
@@ -96,8 +96,5 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
         raise ValueError("Количество записей не совпадает после конвертации")
 
 
-
-#if __name__ == "__main__":
-    #csv_to_json("data/samples/people.csv", "data/out/result2.json")
-
-
+# if __name__ == "__main__":
+# csv_to_json("data/samples/people.csv", "data/out/result2.json")

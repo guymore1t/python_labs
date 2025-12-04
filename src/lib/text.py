@@ -3,12 +3,12 @@ import re
 
 def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
     if yo2e:
-        text = text.replace('Ё', 'E')
-        text = text.replace('ё', 'е')
+        text = text.replace("Ё", "E")
+        text = text.replace("ё", "е")
 
-    text = text.replace('\r', ' ').replace('\t', ' ').replace('\n', ' ')
+    text = text.replace("\r", " ").replace("\t", " ").replace("\n", " ")
     text = text.split()
-    text = ' '.join(text)
+    text = " ".join(text)
 
     if casefold:
         text = text.casefold()
@@ -17,7 +17,7 @@ def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
 
 
 def tokenize(text: str) -> list[str]:
-    pattern = r'\w+(?:-\w+)*'
+    pattern = r"\w+(?:-\w+)*"
     return re.findall(pattern, text)
 
 

@@ -11,8 +11,7 @@ from lib.text import normalize, tokenize, count_freq, top_n
 
 def main():
     parser = argparse.ArgumentParser(
-        description="CLI утилиты для текста",
-        add_help=False
+        description="CLI утилиты для текста", add_help=False
     )
 
     subparsers = parser.add_subparsers(dest="command", title="доступные команды")
@@ -25,8 +24,13 @@ def main():
     stats_parser.add_argument("--input", required=True, help="Входной файл")
     stats_parser.add_argument("--top", type=int, default=5, help="Количество топ-слов")
 
-    parser.add_argument("-h", "--help", action="help", default=argparse.SUPPRESS, 
-                       help="Показать справку")
+    parser.add_argument(
+        "-h",
+        "--help",
+        action="help",
+        default=argparse.SUPPRESS,
+        help="Показать справку",
+    )
 
     args = parser.parse_args()
 

@@ -1,11 +1,11 @@
 def transpose(mat: list[list[float or int]]) -> list[list]:
     if len(mat) == 0:
         return []
-    
+
     for row in mat:
         if len(mat[0]) != len(row):
             raise ValueError
-        
+
     res = []
 
     row_cnt = len(mat)
@@ -19,15 +19,17 @@ def transpose(mat: list[list[float or int]]) -> list[list]:
 
     return res
 
+
 def row_sums(mat: list[list[float or int]]) -> list[float]:
 
     for row in mat:
         if len(mat[0]) != len(row):
             raise ValueError
-        
+
     res = [sum(row) for row in mat]
 
     return res
+
 
 def col_sums(mat: list[list[float | int]]) -> list[float]:
 
@@ -38,26 +40,3 @@ def col_sums(mat: list[list[float | int]]) -> list[float]:
     res = [sum(row) for row in zip(*mat)]
 
     return res
-
-
-
-
-
-
-    
-        
-
-
-
-
-
-
-        
-
-
-
-        
-
-
-        
-    
