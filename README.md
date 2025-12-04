@@ -303,6 +303,9 @@ def test_csv_to_json_empty_values(tmp_path):
 pytest tests/test_text.py
 py -m pytest tests/test_json_csv.py
 ```
+# Проверка на black
+
+![картинка30](./images/lab07/black.png)
 
 ## Лабораторная работа №6
 

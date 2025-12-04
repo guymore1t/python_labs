@@ -23,7 +23,6 @@ def test_json_to_csv_basic(tmp_path):
 
     json_to_csv(str(json_file), str(csv_file))
 
-
     assert csv_file.exists()
 
     with open(csv_file, "r", encoding="utf-8") as f:
