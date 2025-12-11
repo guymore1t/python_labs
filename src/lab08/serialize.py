@@ -19,7 +19,7 @@ def students_from_json(path: str) -> List[Student]:
     
     with open(file_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
-    
+        
     if not isinstance(data, list):
         raise ValueError("Ожидается список студентов в JSON файле")
     
