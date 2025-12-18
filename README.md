@@ -1,5 +1,190 @@
 # python_labs
 
+## Лабораторная работа №10
+
+# structures.py
+
+```py
+from collections import deque
+
+class Stack:
+    def __init__(self):
+        self._data = []
+    
+    def push(self, item):
+        self._data.append(item)
+    
+    def pop(self):
+        if self.is_empty():
+            raise IndexError("Пустой стек")
+        return self._data.pop()
+    
+    def peek(self):
+        if self.is_empty():
+            return None
+        return self._data[-1]
+    
+    def is_empty(self):
+        return len(self._data) == 0
+    
+    def __len__(self):
+        return len(self._data)
+
+class Queue:
+    def __init__(self):
+        self._data = deque()
+    
+    def enqueue(self, item):
+        self._data.append(item)
+    
+    def dequeue(self):
+        if self.is_empty():
+            raise IndexError("Пустая очередь")
+        return self._data.popleft()
+    
+    def peek(self):
+        if self.is_empty():
+            return None
+        return self._data[0]
+    
+    def is_empty(self):
+        return len(self._data) == 0
+    
+    def __len__(self):
+        return len(self._data)
+
+if __name__ == "__main__":
+    print("Тестирование Stack и Queue\n")
+    
+    print("1. Тест Stack:")
+    s = Stack()
+    s.push(10)
+    s.push(20)
+    s.push(30)
+    print(f"  push(10,20,30)")
+    print(f"  pop() = {s.pop()}")
+    print(f"  peek() = {s.peek()}")
+    print(f"  размер = {len(s)}")
+    print(f"  пустой? {s.is_empty()}")
+    
+    print("\n2. Тест Queue:")
+    q = Queue()
+    q.enqueue("A")
+    q.enqueue("B")
+    q.enqueue("C")
+    print(f"  enqueue(A,B,C)")
+    print(f"  dequeue() = {q.dequeue()}")
+    print(f"  peek() = {q.peek()}")
+    print(f"  размер = {len(q)}")
+    print(f"  пустая? {q.is_empty()}")
+
+```
+
+![картинка35](./images/lab10/structures.png)
+
+# linked_list.py
+
+```py
+class Node:
+    def __init__(self, value, next=None):
+        self.value = value
+        self.next = next
+
+class SinglyLinkedList:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        self._size = 0
+    
+    def append(self, value):
+        new_node = Node(value)
+        if self.head is None:
+            self.head = new_node
+            self.tail = new_node
+        else:
+            self.tail.next = new_node
+            self.tail = new_node
+        self._size += 1
+    
+    def prepend(self, value):
+        new_node = Node(value, self.head)
+        self.head = new_node
+        if self.tail is None:
+            self.tail = new_node
+        self._size += 1
+    
+    def insert(self, idx, value):
+        if idx < 0 or idx > self._size:
+            raise IndexError("Неправильный индекс")
+        if idx == 0:
+            self.prepend(value)
+        elif idx == self._size:
+            self.append(value)
+        else:
+            current = self.head
+            for i in range(idx - 1):
+                current = current.next
+            new_node = Node(value, current.next)
+            current.next = new_node
+            self._size += 1
+    
+    def remove_at(self, idx):
+        if idx < 0 or idx >= self._size:
+            raise IndexError("Неправильный индекс")
+        if idx == 0:
+            removed = self.head
+            self.head = self.head.next
+            if self.head is None:
+                self.tail = None
+        else:
+            current = self.head
+            for i in range(idx - 1):
+                current = current.next
+            removed = current.next
+            current.next = current.next.next
+            if current.next is None:
+                self.tail = current
+        self._size -= 1
+        return removed.value
+    
+    def __iter__(self):
+        current = self.head
+        while current is not None:
+            yield current.value
+            current = current.next
+    
+    def __len__(self):
+        return self._size
+    
+    def __repr__(self):
+        return f"LinkedList({list(self)})"
+
+if __name__ == "__main__":
+    print("Тестирование SinglyLinkedList\n")
+    
+    print("1. Тест SinglyLinkedList:")
+    lst = SinglyLinkedList()
+    lst.append(10)
+    lst.append(20)
+    lst.append(30)
+    lst.prepend(5)
+    lst.insert(2, 15)
+    print(f"  append(10,20,30), prepend(5), insert(2,15)")
+    print(f"  список: {lst}")
+    print(f"  размер: {len(lst)}")
+    print(f"  удаляем индекс 2: {lst.remove_at(2)}")
+    print(f"  список: {lst}")
+    
+    print("\n2. Итерация по списку:")
+    for item in lst:
+        print(f"  - {item}")
+
+```
+
+![картинка36](./images/lab10/linked_list.png)
+
+
+
 ## Лабораторная работа №9
 
 # group.py
